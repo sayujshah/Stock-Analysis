@@ -34,7 +34,8 @@ def get_symbols(symbols,data_source, begin_date=None,end_date=None):
     
     out = pd.DataFrame()
     for symbol in symbols:
-        df = web.DataReader(symbol, data_source,begin_date, end_date, api_key='K45BwXh1hBWjQMVjz7d5')\
+        # Make sure to insert your own API key in place for "api_key"
+        df = web.DataReader(symbol, data_source,begin_date, end_date, api_key=<insert your API key here>)\
         [['AdjOpen','AdjHigh','AdjLow','AdjClose','AdjVolume']].reset_index()
         df.columns = ['Date','Open','High','Low',symbol,'Volume'] #my convention: always lowercase
         df['Symbol'] = symbol # add a new column which contains the symbol so we can keep multiple symbols in the same dataframe
@@ -62,7 +63,7 @@ def input_ticker():
 # User-specified stock ticker will be the "symbols" input for the "get_symbols" function
 symbol = input_ticker()
 
-# Call the function and assign the returned dataframe object to a variable
+# Call the function and assign the returned dataframe object to a variable. I am using Quandl here but feel free to use any data source you are comfortable with
 df = get_symbols(symbol,data_source='quandl',\
                      begin_date='2009-12-31',end_date=today)
 
