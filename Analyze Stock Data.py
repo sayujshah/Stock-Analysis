@@ -5,8 +5,6 @@ Created on Mon Jun 22 12:22:28 2020
 @author: sayuj
 """
 
-from datetime import datetime as dt
-
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
 import pandas_datareader.data as web
