@@ -33,6 +33,7 @@ def get_symbols(symbols,data_source, begin_date=None,end_date=None):
     -------
 
     """
+    
     out = pd.DataFrame()
     for symbol in symbols:
         df = web.DataReader(symbol, data_source,begin_date, end_date, api_key='K45BwXh1hBWjQMVjz7d5')\
@@ -44,6 +45,12 @@ def get_symbols(symbols,data_source, begin_date=None,end_date=None):
     return out.sort_index()
 
 def input_ticker():
+    """
+    
+    Function that allows for a user to input as many stock tickers they would like to extract data for
+    
+    """
+    
     tickers = []
     while True:
         user_input = input('Stock Ticker (type "Done" if finished): ')
@@ -61,6 +68,7 @@ symbol = input_ticker()
 df = get_symbols(symbol,data_source='quandl',\
                      begin_date='2009-12-31',end_date=today)
 
+# Plot the stock price data for each stock symbol
 for i in symbol:
     plt.figure(figsize=(14, 5), dpi=100)
     plt.plot(df['Date'],df[i], label=i + ' stock')
