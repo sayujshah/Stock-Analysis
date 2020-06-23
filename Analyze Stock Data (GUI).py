@@ -72,7 +72,7 @@ class StockAnalysis(tk.Frame):
     
         """
         out = pd.DataFrame()
-        df = web.DataReader(symbol, data_source,begin_date, end_date, api_key=""""<input your api key here>""")\
+        df = web.DataReader(symbol, data_source,begin_date, end_date, api_key=""""<insert your api key here>""")\
         [['AdjOpen','AdjHigh','AdjLow','AdjClose','AdjVolume']].reset_index()
         df.columns = ['Date','Open','High','Low',symbol,'Volume'] #my convention: always lowercase
         df['Symbol'] = symbol # add a new column which contains the symbol so we can keep multiple symbols in the same dataframe
