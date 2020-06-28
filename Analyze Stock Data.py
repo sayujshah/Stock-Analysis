@@ -19,6 +19,7 @@ from datetime import datetime
 
 import inspect
 
+# API key is being pulled from a seperate config.py file
 import config
 
 # Set today's date in order to pull stock data through current time
