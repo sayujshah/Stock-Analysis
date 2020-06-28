@@ -22,8 +22,10 @@ import inspect
 # Set today's date in order to pull stock data through current time
 today = datetime.strftime(datetime.today(), "%Y-%m-%d")
 
-# Create the function to extract data from a specific data sources (CSV, API, JSON, etc.)
+# The following function extracts stock data from a specific data source
+# (CSV, API, JSON, etc.)
 def get_symbols(symbols,data_source, begin_date, end_date=today):
+    
     """
     Parameters
     ----------
@@ -40,16 +42,17 @@ def get_symbols(symbols,data_source, begin_date, end_date=today):
     for symbol in symbols:
         df = web.DataReader(symbol, data_source, begin_date, end_date, api_key="""INSERT YOUR API KEY HERE""")\
         [['AdjOpen','AdjHigh','AdjLow','AdjClose','AdjVolume']].reset_index()
-        df.columns = ['Date','Open','High','Low',symbol,'Volume'] #my convention: always lowercase
+        df.columns = ['Date','Open','High','Low',symbol,'Volume']
         df = df[::-1].reset_index()
         out.append(df.sort_index())
     return out
 
-
 def input_ticker():
+    
     """
     
-    Function that allows for a user to input as many stock tickers they would like to extract data for
+    Function that allows for a user to input as many stock tickers they would
+    like to extract data for
     
     """
     
@@ -64,17 +67,23 @@ def input_ticker():
     return tickers
 
 def input_indicator():
+    
     """
     
-    Function that allows for a user to input as many technical indicators as they would like to plot for the selected stocks
+    Function that allows for a user to input as many technical indicators as
+    they would like to plot for the selected stocks
     
     """
     
     indicators = []
     while True:
         user_input = input('Technical Indicator (type "Done" if finished and "Help" for list of indicators): ')
+        # The prompt ends when the user is done entering all their desired
+        # indicators
         if user_input == 'Done':
             break
+        # A list of all possible commands (indicators) pops up when the user
+        # asks for "Help"
         elif user_input == 'Help':
             print(talib.get_functions())
             continue
@@ -86,10 +95,19 @@ def input_indicator():
     return indicators
 
 def plot_graphs():
-    # User-specified stock ticker will be the "symbols" input for the "get_symbols" function
+    
+    """
+        
+    Function that graphs the user-inputted stock tickers
+        
+    """
+    
+    # User-specified stock ticker will be the "symbols" input for the
+    # "get_symbols" function
     symbol = input_ticker()
     
-    # Call the function and assign the returned dataframe object to a variable
+    # Calls the function and assigns the returned dataframe object to a
+    # variable
     df = get_symbols(symbol,data_source='quandl',\
                          begin_date='2009-12-31', end_date=today)
     
@@ -99,8 +117,7 @@ def plot_graphs():
     close_df = {}
     volume_df = {}
     
-    
-    # Plot the stock price data for each stock symbol
+    # The following plots the stock price data for each stock symbol
     plt.figure(figsize=(14, 5), dpi=100)
     for i,v in enumerate(symbol):
         plt.plot(df[i]['Date'], df[i][v], label=f'{v}')
@@ -123,14 +140,22 @@ def plot_graphs():
     volume= pd.DataFrame(volume_df)
     periods = 30
     
+     # User-specified indicator
     indicators = input_indicator()
+    # Dictionary of all functions from the TA-Lib library
     indicator_dict = {'HT_DCPERIOD': HT_DCPERIOD, 'HT_DCPHASE': HT_DCPHASE, 'HT_PHASOR': HT_PHASOR, 'HT_SINE': HT_SINE, 'HT_TRENDMODE': HT_TRENDMODE, 'ADD': ADD, 'DIV': DIV, 'MAX': MAX, 'MAXINDEX': MAXINDEX, 'MIN': MIN, 'MININDEX': MININDEX, 'MINMAX': MINMAX, 'MINMAXINDEX': MINMAXINDEX, 'MULT': MULT, 'SUB': SUB, 'SUM': SUM, 'ACOS': ACOS, 'ASIN': ASIN, 'ATAN': ATAN, 'CEIL': CEIL, 'COS': COS, 'COSH': COSH, 'EXP': EXP, 'FLOOR': FLOOR, 'LN': LN, 'LOG10': LOG10, 'SIN': SIN, 'SINH': SINH, 'SQRT': SQRT, 'TAN': TAN, 'TANH': TANH, 'ADX': ADX, 'ADXR': ADXR, 'APO': APO, 'AROON': AROON, 'AROONOSC': AROONOSC, 'BOP': BOP, 'CCI': CCI, 'CMO': CMO, 'DX': DX, 'MACD': MACD, 'MACDEXT': MACDEXT, 'MACDFIX': MACDFIX, 'MFI': MFI, 'MINUS_DI': MINUS_DI, 'MINUS_DM': MINUS_DM, 'MOM': MOM, 'PLUS_DI': PLUS_DI, 'PLUS_DM': PLUS_DM, 'PPO': PPO, 'ROC': ROC, 'ROCP': ROCP, 'ROCR': ROCR, 'ROCR100': ROCR100, 'RSI': RSI, 'STOCH': STOCH, 'STOCHF': STOCHF, 'STOCHRSI': STOCHRSI, 'TRIX': TRIX, 'ULTOSC': ULTOSC, 'WILLR': WILLR, 'BBANDS': BBANDS, 'DEMA': DEMA, 'EMA': EMA, 'HT_TRENDLINE': HT_TRENDLINE, 'KAMA': KAMA, 'MA': MA, 'MAMA': MAMA, 'MAVP': MAVP, 'MIDPOINT': MIDPOINT, 'MIDPRICE': MIDPRICE, 'SAR': SAR, 'SAREXT': SAREXT, 'SMA': SMA, 'T3': T3, 'TEMA': TEMA, 'TRIMA': TRIMA, 'WMA': WMA, 'CDL2CROWS': CDL2CROWS, 'CDL3BLACKCROWS': CDL3BLACKCROWS, 'CDL3INSIDE': CDL3INSIDE, 'CDL3LINESTRIKE': CDL3LINESTRIKE, 'CDL3OUTSIDE': CDL3OUTSIDE, 'CDL3STARSINSOUTH': CDL3STARSINSOUTH, 'CDL3WHITESOLDIERS': CDL3WHITESOLDIERS, 'CDLABANDONEDBABY': CDLABANDONEDBABY, 'CDLADVANCEBLOCK': CDLADVANCEBLOCK, 'CDLBELTHOLD': CDLBELTHOLD, 'CDLBREAKAWAY': CDLBREAKAWAY, 'CDLCLOSINGMARUBOZU': CDLCLOSINGMARUBOZU, 'CDLCONCEALBABYSWALL': CDLCONCEALBABYSWALL, 'CDLCOUNTERATTACK': CDLCOUNTERATTACK, 'CDLDARKCLOUDCOVER': CDLDARKCLOUDCOVER, 'CDLDOJI': CDLDOJI, 'CDLDOJISTAR': CDLDOJISTAR, 'CDLDRAGONFLYDOJI': CDLDRAGONFLYDOJI, 'CDLENGULFING': CDLENGULFING, 'CDLEVENINGDOJISTAR': CDLEVENINGDOJISTAR, 'CDLEVENINGSTAR': CDLEVENINGSTAR, 'CDLGAPSIDESIDEWHITE': CDLGAPSIDESIDEWHITE, 'CDLGRAVESTONEDOJI': CDLGRAVESTONEDOJI, 'CDLHAMMER': CDLHAMMER, 'CDLHANGINGMAN': CDLHANGINGMAN, 'CDLHARAMI': CDLHARAMI, 'CDLHARAMICROSS': CDLHARAMICROSS, 'CDLHIGHWAVE': CDLHIGHWAVE, 'CDLHIKKAKE': CDLHIKKAKE, 'CDLHIKKAKEMOD': CDLHIKKAKEMOD, 'CDLHOMINGPIGEON': CDLHOMINGPIGEON, 'CDLIDENTICAL3CROWS': CDLIDENTICAL3CROWS, 'CDLINNECK': CDLINNECK, 'CDLINVERTEDHAMMER': CDLINVERTEDHAMMER, 'CDLKICKING': CDLKICKING, 'CDLKICKINGBYLENGTH': CDLKICKINGBYLENGTH, 'CDLLADDERBOTTOM': CDLLADDERBOTTOM, 'CDLLONGLEGGEDDOJI': CDLLONGLEGGEDDOJI, 'CDLLONGLINE': CDLLONGLINE, 'CDLMARUBOZU': CDLMARUBOZU, 'CDLMATCHINGLOW': CDLMATCHINGLOW, 'CDLMATHOLD': CDLMATHOLD, 'CDLMORNINGDOJISTAR': CDLMORNINGDOJISTAR, 'CDLMORNINGSTAR': CDLMORNINGSTAR, 'CDLONNECK': CDLONNECK, 'CDLPIERCING': CDLPIERCING, 'CDLRICKSHAWMAN': CDLRICKSHAWMAN, 'CDLRISEFALL3METHODS': CDLRISEFALL3METHODS, 'CDLSEPARATINGLINES': CDLSEPARATINGLINES, 'CDLSHOOTINGSTAR': CDLSHOOTINGSTAR, 'CDLSHORTLINE': CDLSHORTLINE, 'CDLSPINNINGTOP': CDLSPINNINGTOP, 'CDLSTALLEDPATTERN': CDLSTALLEDPATTERN, 'CDLSTICKSANDWICH': CDLSTICKSANDWICH, 'CDLTAKURI': CDLTAKURI, 'CDLTASUKIGAP': CDLTASUKIGAP, 'CDLTHRUSTING': CDLTHRUSTING, 'CDLTRISTAR': CDLTRISTAR, 'CDLUNIQUE3RIVER': CDLUNIQUE3RIVER, 'CDLUPSIDEGAP2CROWS': CDLUPSIDEGAP2CROWS, 'CDLXSIDEGAP3METHODS': CDLXSIDEGAP3METHODS, 'AVGPRICE': AVGPRICE, 'MEDPRICE': MEDPRICE, 'TYPPRICE': TYPPRICE, 'WCLPRICE': WCLPRICE, 'BETA': BETA, 'CORREL': CORREL, 'LINEARREG': LINEARREG, 'LINEARREG_ANGLE': LINEARREG_ANGLE, 'LINEARREG_INTERCEPT': LINEARREG_INTERCEPT, 'LINEARREG_SLOPE': LINEARREG_SLOPE, 'STDDEV': STDDEV, 'TSF': TSF, 'VAR': VAR, 'ATR': ATR, 'NATR': NATR, 'TRANGE': TRANGE, 'AD': AD, 'ADOSC': ADOSC, 'OBV': OBV}
     keys_list = list(indicator_dict)
     legend = []
     
+    # The following for loop iterates through the chosen indicators and plots
+    # its results onto a graph
     for i in indicators:
         plt.figure(figsize=(20, 5), dpi=100)
         
+        # The following if statements are necessary to pull the chosen
+        # indicator and plot the line based on its specific function
+        # parameters
+            
         # CYCLE INDICATORS
         if i in keys_list[0:5]:
             ind = indicator_dict.get(i)
@@ -418,4 +443,5 @@ def plot_graphs():
         plt.legend(legend)
         plt.show()
 
+# The following initiates the program
 plot_graphs()
