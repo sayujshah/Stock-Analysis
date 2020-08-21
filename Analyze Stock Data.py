@@ -25,8 +25,6 @@ import config
 # Set today's date in order to pull stock data through current time
 today = datetime.strftime(datetime.today(), "%Y-%m-%d")
 
-# The following function extracts stock data from a specific data source
-# (CSV, API, JSON, etc.)
 def get_symbols(symbols,data_source, begin_date, end_date=today):
     
     """
@@ -36,9 +34,10 @@ def get_symbols(symbols,data_source, begin_date, end_date=today):
     data_source : data source that the stock data will be pulled from (CSV, API, JSON, etc.)
     begin_date : start of lookback period/start point for the timeframe you want data for (default is None)
     end_date : end of lookback period/end point for the timeframe you want data for (default is None)
-        DESCRIPTION. The default is None.
-    Returns: a dataframe of stock data for the specified ticker that includes opening, high, low, and closing price, as well as stock volume
+
+    Returns
     -------
+    A dataframe of stock data for the specified ticker that includes opening, high, low, and closing price, as well as stock volume
     """
     
     out = []
