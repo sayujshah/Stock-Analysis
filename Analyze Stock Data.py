@@ -25,7 +25,7 @@ import config
 # Set today's date in order to pull stock data through current time
 today = datetime.strftime(datetime.today(), "%Y-%m-%d")
 
-def get_symbols(symbols,data_source, begin_date, end_date=today):
+def get_symbols(symbols, data_source, begin_date, end_date=today):
     
     """
     Parameters
